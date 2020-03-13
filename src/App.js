@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
@@ -23,23 +23,49 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         
         <h3>Phones Collection:</h3>
-        
-        {
-          phones.map(phones => <Products collection ={phones}></Products>) 
-        }
-          {/* <Products collection ={phones[0]}></Products>
-          <Products collection ={phones[1]}></Products>
-          <Products collection ={phones[2]}></Products>
-          <Products collection ={phones[3]}></Products>
-          <Products collection ={phones[4]}></Products>
-          <Products collection ={phones[5]}></Products> */}
-
-        
-
-
+        <Counter></Counter>
+        <Users></Users>
+        <div>
+          {
+            phones.map(phones => <Products collection ={phones}></Products>) 
+          }
+         </div>
       </header>
     </div>
   );
+}
+
+function Counter(){
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onMouseMove={() => setCount(count - 1)}>Decrease</button>
+      <button onMouseMove={() => setCount(count + 1)}>Increase</button>
+    </div>
+  )
+}
+
+function Users(){
+  const [users, setUsers] =useState([]);
+  useEffect(()=>{
+    fetch('https://jsonplaceholder.typicode.com/users')
+  .then(response => response.json())
+  .then(data => setUsers(data))
+  }, [])
+  return(
+    <div>
+      <h3>Dynamic Users: {users.length}</h3>
+      <ul>
+
+      {
+        users.map(user => <li>{user.name} <br/> {user.phone} </li>)
+      }
+      </ul>
+        
+    </div>
+  )
 }
 
 function Products(props){
@@ -47,7 +73,7 @@ function Products(props){
   const {name, price} = props.collection;
   const div ={
     color:"blue",
-    backgroundColor:'beige',
+    backgroundColor:'light-gray',
     padding:"30px",
     paddingBottom:"60px",
     margin:"20px",
